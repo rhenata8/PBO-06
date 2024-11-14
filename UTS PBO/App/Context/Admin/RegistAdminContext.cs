@@ -1,4 +1,4 @@
-﻿using Npgsql;
+using Npgsql;
 using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
@@ -13,81 +13,49 @@ namespace UTS_PBO.App.Context.Admin
 {
     internal class RegistAdminContext : Database_admin
     {
-        private static string table = "Akun_admin";
-
-        public static DataTable All()
-        {
-            string query = @"
-        SELECT 
-            m.id,
-            m.nama,
-            m.username,
-            m.password";
-
-            DataTable dataAdmin = queryExecutor(query);
-            return dataAdmin;
-        }
-
-        public static DataTable getAdminById(int id)
-        {
-            string query = @"
-                SELECT 
-                    m.id,
-                    m.nama,
-                    m.username,
-                    m.password";
-
-            NpgsqlParameter[] parameters =
-            {
-                new NpgsqlParameter("@id", NpgsqlDbType.Integer) { Value = id }
-            };
-
-            DataTable dataAdmin = queryExecutor(query, parameters);
-            return dataAdmin;
-        }
-
+        private static string table = "Admin";
 
         public static void AddAdmin(M_registadmin adminBaru)
         {
-            string query = $"INSERT INTO {table} (nama, username, password) VALUES(@nama, @username, @password)";
+            string query = $@"
+                INSERT INTO {table} (nama, username, password, no_telp, email) 
+                VALUES (@nama, @username, @password, @no_telp, @email)";
 
             NpgsqlParameter[] parameters =
             {
-                new NpgsqlParameter("@nama", adminBaru.nama),
-                new NpgsqlParameter("@username", adminBaru.username),
-                new NpgsqlParameter("@password", adminBaru.password)
+                new NpgsqlParameter("@nama", adminBaru.nama ),
+                new NpgsqlParameter("@username", adminBaru.username ),
+                new NpgsqlParameter("@password", adminBaru.password ),
+                new NpgsqlParameter("@no_telp",  adminBaru.no_telp ),
+                new NpgsqlParameter("@email", adminBaru.email )
             };
 
             commandExecutor(query, parameters);
         }
 
-        //public static void UpdateMahasiswa(M_admin mahasiswa)
-        //{
-        //    string query = $"UPDATE {table} SET nama = @nama, nim = @nim, email = @email, semester = @semester, id_prodi = @id_prodi WHERE id = @id";
+        public static void UpdateAdmin(M_registadmin admin)
+        {
+            string query = $@"
+                UPDATE {table} 
+                SET nama = @nama, 
+                    username = @username, 
+                    email = @email, 
+                    password = @password, 
+                    no_telp = @no_telp 
+                WHERE id = @id";
 
-        //    NpgsqlParameter[] parameters =
-        //    {
-        //        new NpgsqlParameter("@nama", mahasiswa.nama),
-        //        new NpgsqlParameter("@nim", mahasiswa.nim),
-        //        new NpgsqlParameter("@email", mahasiswa.email),
-        //        new NpgsqlParameter("@semester", mahasiswa.semester),
-        //        new NpgsqlParameter("@id_prodi", mahasiswa.id_prodi),
-        //        new NpgsqlParameter("@id", mahasiswa.id)
-        //    };
+            NpgsqlParameter[] parameters =
+            {
+                new NpgsqlParameter("@nama", admin.nama ),
+                new NpgsqlParameter("@username", admin.username ),
+                new NpgsqlParameter("@password", admin.password ),
+                new NpgsqlParameter("@no_telp",  admin.no_telp ),
+                new NpgsqlParameter("@email", admin.email )
+            };
 
-        //    commandExecutor(query, parameters);
-        //}
+            commandExecutor(query, parameters);
+        }
 
-        //public static void DeleteMahasiswa(int id)
-        //{
-        //    string query = $"DELETE FROM {table} WHERE id = @id";
 
-        //    NpgsqlParameter[] parameters =
-        //    {
-        //        new NpgsqlParameter("@id", id)
-        //    };
-
-        //    commandExecutor(query, parameters);
-        //}
     }
 }

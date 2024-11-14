@@ -1,4 +1,4 @@
-﻿using Npgsql;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UTS_PBO.App.Context.Admin;
 
 namespace UTS_PBO.View.Admin
 {
@@ -34,56 +35,28 @@ namespace UTS_PBO.View.Admin
             string username = txtUsername.Text;
             string password = txtPassword.Text;
 
-            Console.WriteLine($"Username: {username}");
-            Console.WriteLine($"Password: {password}");
 
             try
             {
-                openConnection();
+                bool isValid = LoginAdminContext.ValidateLogin(username, password);
 
-                string query = "SELECT * FROM Akun_admin WHERE username = @username AND password = @password";
-                using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                if (isValid)
                 {
-                    command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@password", password);
-
-                    using (NpgsqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            this.Hide();
-                            Dashboard_admin dashboard_Admin = new Dashboard_admin();
-                            dashboard_Admin.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Username tidak terdaftar");
-                        }
-                    }
+                    this.Hide();
+                    Dashboard_admin dashboard_Admin = new Dashboard_admin();
+                    dashboard_Admin.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Username atau Password salah");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
-            finally
-            {
-                connection.Close();
-            }
+            
         }
-
-        private static void openConnection()
-        {
-            connection = new NpgsqlConnection($"Host={DB_HOST};Username={DB_USERNAME};Password={DB_PASSWORD};Database={DB_DATABASE};Port={DB_PORT}");
-            connection.Open();
-        }
-
-        private static readonly string DB_HOST = "localhost";
-        private static readonly string DB_DATABASE = "PROJEK PBO";
-        private static readonly string DB_USERNAME = "postgres";
-        private static readonly string DB_PASSWORD = "rh3r1ffs";
-        private static readonly string DB_PORT = "5432";
-        private static NpgsqlConnection connection;
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -98,7 +71,7 @@ namespace UTS_PBO.View.Admin
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Hide();
-            Register_admin register_Admin = new Register_admin();
+            RegisterAdmin register_Admin = new RegisterAdmin();
             register_Admin.Show();
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,6 +18,10 @@ namespace UTS_PBO.App.Model
         public string username { get; set; }
         [Required]
         public string password { get; set; }
-        
+        [Required]
+        public string no_telp { get; set; }
+        [Required]
+        public string email { get; set; }
+
     }
 }

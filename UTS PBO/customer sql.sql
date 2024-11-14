@@ -1,0 +1,1 @@
+select * from akun_customer

@@ -20,5 +20,7 @@ namespace UTS_PBO.App.Model.M_Admin
           public int nomer_meja { get; set; }
           [Required]
           public int harga { get; set; }
+          [Required]
+          public DateTime tanggal { get; set; } 
     }
 }

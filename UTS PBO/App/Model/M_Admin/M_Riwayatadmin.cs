@@ -21,7 +21,9 @@ namespace UTS_PBO.App.Model.M_Admin
         public string makanan { get; set; }
         [Required]
         public string minuman { get; set; }
+        [Required]
         public int harga { get; set; }
+        [Required]
         public string status  { get; set; }
     }
 }
